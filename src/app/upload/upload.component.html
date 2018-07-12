@@ -1,0 +1,25 @@
+<div id="upload" class="container form-upload">
+  <h4>Upload & Publish Your Photos</h4>
+  <br>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="file-uploading kv-hidden" id="loading">Uploading</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-10">
+      <!--The content below is only a placeholder and can be replaced.-->
+      <!-- IMG preview -->
+      <p *ngIf="errorMsg" style="color:red">{{errorMsg}}</p>
+      <!-- Form with submit method and template variable (#fileInput) -->
+      <form (submit)="uploadFile($event)">
+        <div class="form-group">
+          <div class="file-loading">
+            <input id="file-1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1" (change)="previewFile()" #fileInput>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

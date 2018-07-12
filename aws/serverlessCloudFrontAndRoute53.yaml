@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Creating the CloudFront Web Distribution and Route 53 Failover record sets.'
+Parameters:
+  DomainName:
+    Description: Enter the application domain name(The hostname of the multi-region endpoint).
+    Type: String
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+  Region1AppURL:
+    Description: Enter the Application url of primary region (s3 website url without http:\\).
+    Type: String
+  Region2AppURL:
+    Description: Enter the Application url of secondary region (s3 website url without http:\\).
+    Type: String
+  HostedZoneId:
+    Description: The hosted zone we will create records in.
+    Type: String  
+Mappings:
+  RegionMap:
+    us-east-1:
+      S3hostedzoneID: Z3AQBSTGFYJSTF
+      websiteendpoint: s3-website-us-east-1.amazonaws.com
+    us-east-2:
+      S3hostedzoneID: Z2O1EMRO9K5GLX
+      websiteendpoint: s3-website.us-east-2.amazonaws.com  
+    us-west-1:
+      S3hostedzoneID: Z2F56UZL2M1ACD
+      websiteendpoint: s3-website-us-west-1.amazonaws.com
+    us-west-2:
+      S3hostedzoneID: Z3BJ6K6RIION7M
+      websiteendpoint: s3-website-us-west-2.amazonaws.com
+    ca-central-1:
+      S3hostedzoneID: Z1QDHH18159H29
+      websiteendpoint: s3-website.ca-central-1.amazonaws.com  
+    eu-west-1:
+      S3hostedzoneID: Z1BKCTXD74EZPE
+      websiteendpoint: s3-website-eu-west-1.amazonaws.com
+    ap-southeast-1:
+      S3hostedzoneID: Z3O0J2DXBE1FTB
+      websiteendpoint: s3-website-ap-southeast-1.amazonaws.com
+    ap-southeast-2:
+      S3hostedzoneID: Z1WCIGYICN2BYD
+      websiteendpoint: s3-website-ap-southeast-2.amazonaws.com
+    ap-northeast-1:
+      S3hostedzoneID: Z2M4EHUR26P7ZW
+      websiteendpoint: s3-website-ap-northeast-1.amazonaws.com
+    sa-east-1:
+      S3hostedzoneID: Z31GFT0UA1I2HV
+      websiteendpoint: s3-website-sa-east-1.amazonaws.com
+Resources:
+  PrimaryCFEndPoint:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: Cloudfront Distribution pointing to S3 bucket
+        Origins:
+        - DomainName: !Ref Region1AppURL
+          Id: S3Origin
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        Aliases:
+        - !Ref DomainName
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - GET
+          - HEAD
+          Compress: true
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: allow-all
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+  HealthcheckCF:
+    Type: "AWS::Route53::HealthCheck"
+    Properties:
+      HealthCheckConfig:
+        Port: "80"
+        Type: "HTTP"
+        ResourcePath: "/"
+        FullyQualifiedDomainName: !GetAtt [PrimaryCFEndPoint, DomainName] 
+        RequestInterval: "30"
+        FailureThreshold: "2"
+      HealthCheckTags: 
+        - 
+          Key: "Name"
+          Value: "HealthcheckCF"  
+  HealthcheckS3Bucket:
+    Type: "AWS::Route53::HealthCheck"
+    Properties:
+      HealthCheckConfig:
+        Port: "80"
+        Type: "HTTP"
+        ResourcePath: "/"
+        FullyQualifiedDomainName: !Ref Region1AppURL
+        RequestInterval: "30"
+        FailureThreshold: "2"
+      HealthCheckTags: 
+        - 
+          Key: "Name"
+          Value: "HealthcheckS3Bucket"  
+  HealthcheckCalculated:
+    Type: "AWS::Route53::HealthCheck"
+    Properties:
+      HealthCheckConfig:
+        Type: "CALCULATED"
+        ChildHealthChecks: 
+          - !Ref HealthcheckS3Bucket
+          - !Ref HealthcheckCF
+        HealthThreshold: 2
+      HealthCheckTags: 
+        - 
+          Key: "Name"
+          Value: "HealthcheckCalculated"   
+  WebsiteDNSName:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      RecordSets:
+      - Name: !Ref DomainName
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: !GetAtt [PrimaryCFEndPoint, DomainName] 
+        Failover: "PRIMARY"
+        HealthCheckId: !Ref HealthcheckCalculated
+        SetIdentifier: "primary-record"
+      - Name: !Ref DomainName
+        Type: A
+        AliasTarget:
+          HostedZoneId: !FindInMap [ RegionMap, !Ref 'AWS::Region', S3hostedzoneID]
+          DNSName: !FindInMap [ RegionMap, !Ref 'AWS::Region', websiteendpoint]         
+        Failover: "SECONDARY"
+        SetIdentifier: "secondary-record"
+   
+      
+

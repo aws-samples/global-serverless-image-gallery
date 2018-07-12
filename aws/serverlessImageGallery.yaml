@@ -1,0 +1,409 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Deploy Serverless image gallery application.'
+Parameters:
+    BucketName:
+      Type: String
+    FacebookId:
+      Type: String      
+Outputs:
+  ApiUrl:
+    Description: URL of your API endpoint
+    Value: !Sub "https://${SrvrLsAppApi}.execute-api.${AWS::Region}.amazonaws.com/Stage"
+  DDBTable:
+    Description: DynamoDB Table
+    Value:
+      Ref: ImageMetadata
+  RestApiId:
+    Description: API Gateway API ID
+    Value:
+      Ref: SrvrLsAppApi
+  CognitoIdentityPoolId:
+    Description: Cognito identity pool (federated identity) Id
+    Value:
+      Ref: CognitoIdPool  
+  GalleryS3Bucket:
+    Description: Bucket for storing uploaded images
+    Value:
+      Ref: GalleryBkt 
+  S3ReplAccessRoleId:
+    Description: Cross region replication role
+    Value: !Sub "${S3ReplAccessRole.Arn}"       
+Resources:
+  SrvrLsAppApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          version: "2018-04-24T06:43:00Z"
+          title: "GalleryAppAPI"
+        basePath: "/prod"
+        schemes:
+        - "https"
+        paths:
+          /searchimage:
+            get:
+              consumes:
+              - "application/json"
+              produces:
+              - "application/json"
+              parameters:
+              - name: "searchKey"
+                in: "query"
+                required: true
+                type: "string"
+              responses:
+                "200":
+                  description: "200 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: "string"
+              security:
+              - sigv4: []
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SearchHandler.Arn}/invocations"
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Origin: "'*'"
+                requestTemplates:
+                  application/json: "{\n    \"searchKey\":  \"$input.params('searchKey')\"\
+                    \n}"
+                passthroughBehavior: "when_no_match"
+                httpMethod: "POST"
+                contentHandling: "CONVERT_TO_TEXT"
+                type: "aws"
+            options:
+              consumes:
+              - "application/json"
+              produces:
+              - "application/json"
+              responses:
+                "200":
+                  description: "200 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: "string"
+                    Access-Control-Allow-Methods:
+                      type: "string"
+                    Access-Control-Allow-Headers:
+                      type: "string"
+              x-amazon-apigateway-integration:
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+                      method.response.header.Access-Control-Allow-Origin: "'*'"
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                passthroughBehavior: "when_no_match"
+                type: "mock"
+          /upload-photo:
+            post:
+              produces:
+              - "application/json"
+              responses:
+                "200":
+                  description: "200 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+              security:
+              - sigv4: []
+              x-amazon-apigateway-integration:
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UploadS3.Arn}/invocations"
+                responses:
+                  default:
+                    statusCode: "200"
+                passthroughBehavior: "when_no_match"
+                httpMethod: "POST"
+                contentHandling: "CONVERT_TO_TEXT"
+                type: "aws_proxy"
+            options:
+              consumes:
+              - "application/json"
+              produces:
+              - "application/json"
+              responses:
+                "200":
+                  description: "200 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: "string"
+                    Access-Control-Allow-Methods:
+                      type: "string"
+                    Access-Control-Allow-Headers:
+                      type: "string"
+              x-amazon-apigateway-integration:
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Methods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+                      method.response.header.Access-Control-Allow-Origin: "'*'"
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                passthroughBehavior: "when_no_match"
+                type: "mock"
+        securityDefinitions:
+          sigv4:
+            type: "apiKey"
+            name: "Authorization"
+            in: "header"
+            x-amazon-apigateway-authtype: "awsSigv4"
+        definitions:
+          Empty:
+            type: "object"
+            title: "Empty Schema"        
+  UploadS3:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: lambda.handler
+      Runtime: nodejs6.10
+      CodeUri: 
+        Bucket: !Ref BucketName
+        Key: upload/UploadS3.zip
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 's3:PutObject'
+              Resource: !Sub "${GalleryBkt.Arn}/*"  
+            - Effect: Allow
+              Action:
+                - 'logs:*'
+              Resource: "*"  
+      Events:
+        uploadapi:
+          Type: Api
+          Properties:
+            Path: /upload-photo
+            Method: POST  
+            RestApiId:
+              Ref: SrvrLsAppApi      
+      Environment:
+        Variables:
+          BUCKET: 
+            Ref : GalleryBkt
+  SearchHandler:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - "dynamodb:GetItem"
+                - "dynamodb:Query"
+                - "dynamodb:Scan"
+              Resource: !Sub "${ImageMetadata.Arn}"
+            - Effect: Allow
+              Action:
+                - "s3:Get*"
+                - "s3:List*"
+              Resource: !Sub "${GalleryBkt.Arn}/*" 
+            - Effect: Allow
+              Action:
+                - 'logs:*'
+              Resource: "*"
+      CodeUri: 
+        Bucket: !Ref BucketName
+        Key: search/SearchHandler.zip
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Events:
+        searchApi:
+          Type: Api
+          Properties:
+            Path: /searchimage
+            Method: GET
+            RestApiId:
+              Ref: SrvrLsAppApi
+      Environment:
+        Variables:
+          BUCKET: 
+            Ref : GalleryBkt
+          TBL_NAME: 
+            Ref : ImageMetadata
+  GatherMetadata:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs6.10
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 'dynamodb:PutItem'
+              Resource: !Sub "${ImageMetadata.Arn}"
+            - Effect: Allow
+              Action:
+                - 'logs:*'
+              Resource: "*"  
+            - Effect: Allow
+              Action:
+                - 'rekognition:*'
+              Resource: "*" 
+            - Effect: Allow
+              Action:
+                - "s3:Get*"
+                - "s3:List*"
+              Resource: "*"   
+      CodeUri: 
+        Bucket: !Ref BucketName
+        Key: gatherMetadata/GatherMetadata.zip
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: GalleryBkt
+            Events:
+              - 's3:ObjectCreated:*'
+      Environment:
+        Variables:
+          TBL_NAME: !Ref ImageMetadata      
+  CognitoIdPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      AllowUnauthenticatedIdentities: false
+      SupportedLoginProviders:  
+        "graph.facebook.com": !Ref FacebookId
+  GalleryBkt:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      VersioningConfiguration:
+        Status: Enabled
+  CognitoApiAccessRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRoleWithWebIdentity
+          Condition:
+            ForAnyValue:StringLike:
+              cognito-identity.amazonaws.com:amr:
+              - authenticated
+            StringEquals:
+              cognito-identity.amazonaws.com:aud:
+              - Ref: CognitoIdPool
+          Effect: Allow
+          Principal:
+            Federated:
+            - cognito-identity.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action: execute-api:Invoke
+            Effect: Allow
+            Resource:
+            - Fn::Join:
+              - /
+              - - Fn::Join:
+                  - ':'
+                  - - arn:aws:execute-api
+                    - Ref: AWS::Region
+                    - Ref: AWS::AccountId
+                    - Ref: SrvrLsAppApi
+                - '*/GET/searchimage'
+            - Fn::Join:
+              - /
+              - - Fn::Join:
+                  - ':'
+                  - - arn:aws:execute-api
+                    - Ref: AWS::Region
+                    - Ref: AWS::AccountId
+                    - Ref: SrvrLsAppApi
+                - '*/POST/upload-photo'
+          Version: '2012-10-17'
+        PolicyName: CognitoAPIGWAngularGoogle
+    Type: AWS::IAM::Role
+  S3ReplAccessRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          -
+            Action: "sts:AssumeRole"
+            Effect: Allow
+            Principal:
+              Service:
+                - s3.amazonaws.com
+        Version: "2012-10-17"
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action: 
+            - "s3:GetReplicationConfiguration"
+            - "s3:ListBucket"
+            Effect: Allow
+            Resource: !Sub "${GalleryBkt.Arn}"
+          - Action: 
+            - "s3:GetObjectVersion"
+            - "s3:GetObjectVersionAcl"
+            - "s3:GetObjectVersionTagging"
+            Effect: Allow
+            Resource: !Sub "${GalleryBkt.Arn}/*"
+          - Action: 
+            - "s3:ReplicateObject"
+            - "s3:ReplicateDelete"
+            - "s3:ReplicateTags"
+            Effect: Allow
+            Resource: "arn:aws:s3:::*/*" 
+          Version: '2012-10-17'
+        PolicyName: S3ReplAccessPolicy  
+    Type: AWS::IAM::Role
+  CognitoApiAccessRoleAttach:
+    Properties:
+      IdentityPoolId:
+        Ref: CognitoIdPool
+      Roles:
+        authenticated:
+          Fn::GetAtt:
+          - CognitoApiAccessRole
+          - Arn
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+  ImageMetadata:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: name
+        AttributeType: S
+      - AttributeName: img_id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: name
+        KeyType: HASH
+      - AttributeName: img_id
+        KeyType: RANGE  
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: "NEW_AND_OLD_IMAGES"
+      TableName : !Sub "${AWS::StackName}_ImgMetadata"
+    Type: AWS::DynamoDB::Table

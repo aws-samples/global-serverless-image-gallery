@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>GlblServerless</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="./assets/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="./assets/themes/explorer-fa/theme.css" media="all" rel="stylesheet" type="text/css" />
+  <link href='./assets/css/styles.css' media="all" rel="stylesheet" type="text/css"  />
+  <script src="./assets/js/jquery-3.2.1.min.js"></script>
+  <script src="./assets/js/plugins/sortable.js" type="text/javascript"></script>
+  <script src="./assets/js/fileinput.js" type="text/javascript"></script>
+  <script src="./assets/js/locales/fr.js" type="text/javascript"></script>
+  <script src="./assets/js/locales/es.js" type="text/javascript"></script>
+  <script src="./assets/themes/explorer-fa/theme.js" type="text/javascript"></script>
+  <script src="./assets/themes/fa/theme.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" type="text/javascript"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+
+ 
+</head>
+
+<body>
+   <app-root></app-root>
+</body>
+<script type="text/javascript">
+$("#file-1")
+  .fileinput({
+    theme: 'fa',
+    allowedFileExtensions: ['jpg','jpeg', 'png', 'gif'],
+    overwriteInitial: false,
+    maxFileSize: 500,
+    maxFilesNum: 1,
+    //allowedFileTypes: ['image', 'video', 'flash'],
+    slugCallback: function(filename) {
+      return filename.replace('(', '_').replace(']', '_');
+    }
+  });
+
+</script>
+
+</html>

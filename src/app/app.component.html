@@ -1,0 +1,28 @@
+<nav class="aws-nav-header navbar-inverse bg-dark" style="padding-top:0;padding-bottom:0">
+  <div class="container-fluid">
+    <div class="aws-bg-logo lb-bg-logo aws-amazon_web_services_smile-header-mobile-en">
+      <a href="#"><span>Click here to return to Serverless Application homepage</span></a>
+    </div>
+    <div class="aws-nav-header-right">
+      <ul class="nav navbar-nav">
+        <li><a href="#">Upload</a></li>
+        <li><a routerLink="gallery">Gallery</a></li>
+        <li ><a id="logout" style="display: none" href="javascript:void(0);" (click)="facebookLogin.logout()">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main id="main" class="kv-hidden">
+  <router-outlet></router-outlet>
+</main>
+<div id="login" class="container kv-hidden">
+  <div class="form-signin">
+    <div class="form-group">
+      <h4>Login with your facebook account.</h4>
+    </div>
+    <div class="form-group">
+      <button tabindex="0" class="btn btn-primary btn-block" id="fb-signup-btn" type="button" (click)="facebookLogin.login()">
+        <img id="fb-f" src="https://static.xx.fbcdn.net/rsrc.php/v3/yO/r/lF-L3veiXx9.png" style="height: 30px; margin-right: 20px;">Continue with Facebook</button>
+    </div>
+  </div>
+</div>
