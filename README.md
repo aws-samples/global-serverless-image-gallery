@@ -61,3 +61,6 @@ It will prompt you to choose AWS regions, your Facebook APP ID, application doma
 
 Once the above script is successfully executed, the application is accessible via your domain url.
 
+## Delete AWS resource 
+You can delete the AWS resources created by the above script by deleting the corresponding cloud formation stack from both the regions. 
+
