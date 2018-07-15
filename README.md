@@ -26,18 +26,19 @@ This sample code is made available under a modified MIT license. See the LICENSE
 ## AWS Setup
 ##### Install the required tools (the installation script only runs on Linux and Mac)
 * Create an AWS account
-* Install [npm](https://www.npmjs.com/)
+* [Install npm](https://www.npmjs.com/)
 * [Install or update your aws cli](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) 
 * [Install angular-cli](https://github.com/angular/angular-cli)
 
 
-## Getting the code and running it locally
+## Getting the code
 _This uses the pre-configured AWS resources hosted by AWS_
 
 ```
 # Clone it from github
 git clone --depth 1 git@github.com:aws-samples/global-serverless-image-gallery.git
 ```
+
 ## Creating AWS Resources
 This sample application uses Route 53 to route web traffic to primary and failover regions.
 
@@ -47,15 +48,14 @@ Create a Route-53 public hosted zone. This will be used to define domain names f
 ### Facebook App ID
 Cognito is used to provide user authentication for our serverless image gallery application. We will be using an External Identity Provider (Facebook) to provide authentication across AWS regions. Setup your [Facebook App](https://developers.facebook.com/docs/apps/register/) and get your Facebook App.
 
-
+## Build the code, create required AWS resources and deploy the application   
 ```
 # Create the AWS resources and deploy the application to S3
 cd aws
 ./serverlessImageGalleryWithDNS.sh
 ```
-Running the above command will create the necessary AWS resources and build & deploy your code to AWS. 
-It will prompt you to choose AWS regions, your Facebook APP ID, application domain name and HostedZoneId 
-completely serverless, while choosing Elastic Beanstalk will create an EC2 instance that will host this NodeJS app. 
+Running the above command will create the necessary AWS resources, build and deploy application code to AWS. 
+It will prompt you to choose AWS regions, your Facebook APP ID, application domain name and HostedZoneId. 
 
 *Caution:* You might incur AWS charges after running the setup script
 
