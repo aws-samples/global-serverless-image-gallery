@@ -6,8 +6,7 @@ import * as AWS from 'aws-sdk';
 
 @Component({ 
     selector: 'app-gallery',
-    templateUrl: './gallery.component.html',
-    styleUrls: ['./gallery.component.css']
+    templateUrl: './gallery.component.html']
 })
 export class GalleryComponent implements OnInit {
 
