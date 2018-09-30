@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="form-signin">
+    <div class="form-group">
+      <h4>Gallery</h4>
+      <p>Select image category</p>
+    </div>
+    <div class="form-group">
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Category
+          <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href="javascript:void(0);" (click)="searchImage('Person')">Person</a></li>
+          <li><a href="javascript:void(0);" (click)="searchImage('Building')">Building</a></li>
+          <li><a href="javascript:void(0);" (click)="searchImage('Boat')">Boat</a></li>
+          <li><a href="javascript:void(0);" (click)="searchImage('Urban')">Urban</a></li>
+          <li><a href="javascript:void(0);" (click)="searchImage('Leisure Activities')">Leisure Activities</a></li>
+          <li><a href="javascript:void(0);" (click)="searchImage('Downtown')">Downtown</a></li>
+          <li><a href="javascript:void(0);" (click)="searchImage('Nature')">Nature</a></li>
+        </ul>
+      </div>
+    </div>
+    <br>
+     <div class="form-group" id="no-rec" style="display:none;"><p>No images found for selected Category.</p></div>
+  </div>
+  <br>
+  <br>
+  <div id="gallery" style="display:none;"></div>
+</div>
