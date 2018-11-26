@@ -43,13 +43,15 @@ The visual mapping between API Gateway and Step Functions is displayed on the **
 1. Navigate to the **Integration Request** section
 2. Choose **Mapping Templates** and click on **Add mapping template**. 
 3. Create a Content Type `application/json` and copy the following mapping template. Update **stateMachineArn** with your **NotificationWorkflow** state machine ARN 
+
 ```JavaScript
 { 
     "input": "$util.escapeJavaScript($input.json('$'))",
     "stateMachineArn": "arn:aws:states:<region>:<Account_id>:stateMachine:NotificationWorkflow"
 }
 ```
-    ![body mapping](images/body-mapping.png) 
+
+![body mapping](images/body-mapping.png)
 
 ### Enable CORS
 1. Choose a **POST method** under **Resources**.
