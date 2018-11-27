@@ -34,7 +34,7 @@ ___
     "messageBody" : "test email body"
   }, 
   "sms" : {
-    "phoneNumber" : "<phone no>",
+    "phoneNumber" : "+15417543010",
     "messageBody" : "test sms"
   }, 
   "slack" : {
