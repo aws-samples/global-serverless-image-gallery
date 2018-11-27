@@ -6,7 +6,7 @@ ___
 
 You will use Amazon API Gateway to associate your AWS Step Functions execution API action with methods in an API Gateway API, so that, when an HTTPS request is sent to an API method, API Gateway invokes your Step Function's StartExecution API action.
 
-<span style="color:red">Optionally you can import the API configurations from [swagger](../cfn-templates/NotificationAPI-stage-swagger-apigateway.yaml) file directly in to API Gateway by replacing the role arns and state machine arn.</span>
+Optionally you can import the API configurations from [swagger file](../cfn-templates/NotificationAPI-stage-swagger-apigateway.yaml) directly in to API Gateway by replacing the role arns and state machine arn.
 ___
 
 ## Task 1 - Creating API Gateway API
