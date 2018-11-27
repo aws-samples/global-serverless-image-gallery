@@ -2,7 +2,7 @@
 
 ___
 
-# 7 Clean Up
+# 7. Clean Up
 
 Congratulations on successfully completing the workshop. Time to clean up your environment.
 

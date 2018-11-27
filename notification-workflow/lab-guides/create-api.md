@@ -2,7 +2,7 @@
 
 ___
 
-# 4 Creating and deploying Notification workflow API Using API Gateway
+# 4. Creating and deploying Notification workflow API Using API Gateway
 
 You will use Amazon API Gateway to associate your AWS Step Functions execution API action with methods in an API Gateway API, so that, when an HTTPS request is sent to an API method, API Gateway invokes your Step Function's StartExecution API action.
 

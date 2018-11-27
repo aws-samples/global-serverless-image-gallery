@@ -2,7 +2,7 @@
 
 ___
 
-# 1 Lab Setup
+# 1. Lab Setup
 
 In this activity we will deploy the CloudFormation template to create required IAM roles and configure S3 bucket for hosting static web application.
 

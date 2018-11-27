@@ -2,7 +2,7 @@
 
 ___
 
-# 6 Adding manual approval step to the workflow
+# 6. Adding manual approval step to the workflow
 
 ___
 

@@ -2,7 +2,7 @@
 
 ___
 
-# 2 Creating application functions
+# 2. Creating application functions
 The Notifications workflow application has four lambda functions that are triggered by the Step function to send email, SMS and/or slack message. 
 -	SendEmailNotification function sends an email to the specified email id using Amazon SES.
 -	SendSMSNotification function sends a SMS to the specified phone number using Amazon SNS.	

@@ -2,7 +2,7 @@
 
 ___
 
-# 3 Creating a state machine
+# 3. Creating a state machine
 
 You will create a state machine that models the parallel execution of multiple notification channels based on the input data as illustrated in the below diagram. 
 

@@ -2,7 +2,7 @@
 
 ___
 
-# 5 Deploying static web application for testing NotificationAPI
+# 5. Deploying static web application for testing NotificationAPI
 
 You will deploy a static website in [Amazon Simple Storage Service](https://aws.amazon.com/s3/) (Amazon S3) to invoke NotificationAPI (an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) API)
 ___
