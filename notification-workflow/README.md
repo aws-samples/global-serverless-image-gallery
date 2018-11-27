@@ -28,6 +28,7 @@ ___
 - [Creating a state machine](lab-guides/create-state-machine.md)
 - [Creating and deploying Notification workflow API Using API Gateway](lab-guides/create-api.md)
 - [Deploying test application and testing the NotificationAPI](lab-guides/test-application.md)
+- [Optional : Adding manual approval step to the workflow](lab-guides/optional-manual-approval.md)
 - [Clean Up](lab-guides/cleanup.md)
 
 ## License Summary

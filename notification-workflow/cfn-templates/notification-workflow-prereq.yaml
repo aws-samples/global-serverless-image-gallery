@@ -28,6 +28,7 @@ Resources:
             - ses:SendEmail
             - sns:Publish
             - sns:SetSMSAttributes
+            - states:GetActivityTask
             Effect: Allow
             Resource: '*'
           Version: '2012-10-17'
@@ -81,7 +82,7 @@ Resources:
       - PolicyDocument:
           Statement:
           - Action:
-            - states:StartExecution
+            - states:*
             Effect: Allow
             Resource: '*'
           Version: '2012-10-17'
