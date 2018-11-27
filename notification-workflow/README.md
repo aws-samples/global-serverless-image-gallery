@@ -23,13 +23,13 @@ ___
 
 ## Workshop Activities
 
-- [Lab Setup](lab-guides/lab-setup.md)
-- [Creating Lambda functions](lab-guides/create-lambda-functions.md)
-- [Creating a state machine](lab-guides/create-state-machine.md)
-- [Creating and deploying Notification workflow API Using API Gateway](lab-guides/create-api.md)
-- [Deploying test application and testing the NotificationAPI](lab-guides/test-application.md)
-- [Optional : Adding manual approval step to the workflow](lab-guides/optional-manual-approval.md)
-- [Clean Up](lab-guides/cleanup.md)
+1. [Lab Setup](lab-guides/lab-setup.md)
+2. [Creating Lambda functions](lab-guides/create-lambda-functions.md)
+3. [Creating a state machine](lab-guides/create-state-machine.md)
+4. [Creating and deploying Notification workflow API Using API Gateway](lab-guides/create-api.md)
+5. [Deploying test application and testing the NotificationAPI](lab-guides/test-application.md)
+6. [Optional : Adding manual approval step to the workflow](lab-guides/optional-manual-approval.md)
+7. [Clean Up](lab-guides/cleanup.md)
 
 ## License Summary
 

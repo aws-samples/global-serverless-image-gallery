@@ -1,8 +1,8 @@
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](create-lambda-functions.md)
 
 ___
 
-# Lab Setup
+# 1 Lab Setup
 
 In this activity we will deploy the CloudFormation template to create required IAM roles and configure S3 bucket for hosting static web application.
 
@@ -15,9 +15,8 @@ ___
 Region | Launch
 -------|-----
 US East (N. Virginia) | [![Launch Solution in us-east-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=NotificationsWorkflow&templateURL=https://s3.amazonaws.com/reinvent-notification-workflow-workshop/notification-workflow-prereq.yaml)
-US East (Ohio) | [![Launch Solution in us-east-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=NotificationsWorkflow&templateURL=https://s3.amazonaws.com/reinvent-notification-workflow-workshop/notification-workflow-prereq.yaml)
 US West (Oregon) | [![Launch Solutionin us-west-2](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=NotificationsWorkflow&templateURL=https://s3.amazonaws.com/reinvent-notification-workflow-workshop/notification-workflow-prereq.yaml)
-EU (Ireland) | [![Launch Solution in eu-west-1](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=NotificationsWorkflow&templateURL=https://s3.amazonaws.com/reinvent-notification-workflow-workshop/notification-workflow-prereq.yaml)
+
 
 2. Click **Next** on the Select Template page.
 
@@ -37,4 +36,4 @@ EU (Ireland) | [![Launch Solution in eu-west-1](http://docs.aws.amazon.com/AWSCl
 	![Stack Output](images/cfn-output.png)
 ___
 
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](create-lambda-functions.md)

@@ -1,11 +1,12 @@
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](test-application.md)
 
 ___
 
-# Creating and deploying Notification workflow API Using API Gateway
+# 4 Creating and deploying Notification workflow API Using API Gateway
 
 You will use Amazon API Gateway to associate your AWS Step Functions execution API action with methods in an API Gateway API, so that, when an HTTPS request is sent to an API method, API Gateway invokes your Step Function's StartExecution API action.
 
+<span style="color:red">Optionally you can import the API configurations from [swagger](../cfn-templates/NotificationAPI-stage-swagger-apigateway.yaml) file directly in to API Gateway by replacing the role arns and state machine arn.</span>
 ___
 
 ## Task 1 - Creating API Gateway API
@@ -78,4 +79,4 @@ https://a1b2c3d4e5.execute-api.us-east-1.amazonaws.com/stage/execution
 ```
 ___
 
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](test-application.md)

@@ -1,8 +1,8 @@
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](cleanup.md)
 
 ___
 
-# Adding manual approval step to the workflow
+# 6 Adding manual approval step to the workflow
 
 ___
 
@@ -217,4 +217,4 @@ activity. This should be above the rate at which the activities are scheduled by
 
 7. Click on either Approve or Reject link and verify the state in **State Machine**.  
 ___
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](cleanup.md)

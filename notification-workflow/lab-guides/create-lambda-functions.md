@@ -1,8 +1,8 @@
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](create-state-machine.md)
 
 ___
 
-# Creating application functions
+# 2 Creating application functions
 The Notifications workflow application has four lambda functions that are triggered by the Step function to send email, SMS and/or slack message. 
 -	SendEmailNotification function sends an email to the specified email id using Amazon SES.
 -	SendSMSNotification function sends a SMS to the specified phone number using Amazon SNS.	
@@ -84,7 +84,7 @@ exports.handler = (event, context, callback) =>
 ```
 4. When your Lambda function is created, note its Amazon Resource Name (ARN) in the upper-right corner of the page. For example:
 ```
-arn:aws:lambda:us-east-1:123456789012:function:SendEmailNotification
+arn:aws:lambda:us-east-1:XXXXXXXXXXX:function:SendEmailNotification
 ```
 ___
 
@@ -136,7 +136,7 @@ ___
 
 ## Task 3 - Create SendSlackNotification function
 
-Repeat the above steps from Task 1 to create a new function with name as `SendSlackNotificatio` and below function code. 
+Repeat the above steps from Task 1 to create a new function with name as `SendSlackNotification` and below function code. 
 
 ```JavaScript
 'use strict';
@@ -205,4 +205,4 @@ exports.handler = (event, context, callback) =>
 };
 ```
 ___
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](create-state-machine.md)

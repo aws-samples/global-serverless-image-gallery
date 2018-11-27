@@ -1,8 +1,8 @@
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](create-api.md)
 
 ___
 
-# Creating a state machine
+# 3 Creating a state machine
 
 You will create a state machine that models the parallel execution of multiple notification channels based on the input data as illustrated in the below diagram. 
 
@@ -130,4 +130,4 @@ Use the [Step Functions console](https://console.aws.amazon.com/states/home?regi
 6. Choose **Create State Machine**.
 ___
 
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](create-api.md)

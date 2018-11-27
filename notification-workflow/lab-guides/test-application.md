@@ -1,8 +1,8 @@
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](optional-manual-approval.md)
 
 ___
 
-# Deploying static web application for testing NotificationAPI
+# 5 Deploying static web application for testing NotificationAPI
 
 You will deploy a static website in [Amazon Simple Storage Service](https://aws.amazon.com/s3/) (Amazon S3) to invoke NotificationAPI (an [Amazon API Gateway](https://aws.amazon.com/api-gateway/) API)
 ___
@@ -30,7 +30,7 @@ ___
 {
   "email" : {
     "emailAddress": "< email id>", 
-    "subject" : "New Regarding earlier discussion",
+    "subject" : "sample subject from builder session",
     "messageBody" : "test email body"
   }, 
   "sms" : {
@@ -55,4 +55,4 @@ ___
 
 **You can also send messages only to selected notification channels by modifying the input request JSON. Example - If you do not provide the SMS JSON object in request JSON then SMS will not be sent.**   
 ___
-[Back to main guide](../README.md)
+[Back to main guide](../README.md)|[Next](optional-manual-approval.md)
