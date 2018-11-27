@@ -4,6 +4,7 @@ ___
 
 # 6. Adding manual approval step to the workflow
 
+![Manual Approval Process](images/manual-flow.png)
 ___
 
 ## Task 1 - Create an activity
